@@ -7,4 +7,4 @@ chmod +x scripts/*.sh
 
 ./scripts/InstallDependencies.sh
 ./scripts/DisableAutostart.sh
-./scripts/StartCaddy.shw
+./scripts/StartCaddy.sh
