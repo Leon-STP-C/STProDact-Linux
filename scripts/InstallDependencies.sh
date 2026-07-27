@@ -7,6 +7,7 @@ packages=(
     npm
     caddy
     python3
+    curl
     apache2
     default-mysql-server
 )

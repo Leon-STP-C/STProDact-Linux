@@ -2,7 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$SCRIPT_DIR/release/config/Caddyfile"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONFIG_FILE="$REPO_ROOT/release/config/Caddyfile"
 
 if [[ ! -f "$CONFIG_FILE" ]]; then
   echo "Caddy config not found at $CONFIG_FILE" >&2
