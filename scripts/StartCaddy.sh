@@ -16,7 +16,7 @@ if ! command -v caddy >/dev/null 2>&1; then
 fi
 
 # Allows Caddy to bind to privileged ports (like 80) without running as root
-sudo setcap cap_net_bind_service=+ep $(which caddy)
+sudo "setcap cap_net_bind_service=+ep $(which caddy)"
 
 echo "Starting Caddy with config: $CONFIG_FILE"
 exec caddy run --config "$CONFIG_FILE" --adapter caddyfile
