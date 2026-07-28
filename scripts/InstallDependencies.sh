@@ -6,10 +6,12 @@ packages=(
     nodejs
     npm
     caddy
+    python3
     curl
+	wget
+	gnupg
     apache2
     default-mysql-server
-    python3
 )
 
 
@@ -35,5 +37,7 @@ else
   exit 1
 fi
 
+npm install adm-zip
+
 echo "Dependency installation complete."
-echo "Please note that DBeaver for Database Management has to be installed manually. You can download it from https://dbeaver.io/download/."
+#echo "Please note that DBeaver for Database Management has to be installed manually. You can download it from https://dbeaver.io/download/."

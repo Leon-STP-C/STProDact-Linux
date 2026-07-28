@@ -6,5 +6,7 @@ set -euo pipefail
 chmod +x scripts/*.sh
 
 ./scripts/InstallDependencies.sh
+./scripts/InstallDBeaver.sh
 ./scripts/DisableAutostart.sh
 ./scripts/StartCaddy.sh
+./scripts/Test.sh
