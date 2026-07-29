@@ -5,7 +5,7 @@ DB_NAME="opcua"
 DB_USER="opcua"
 DB_PASSWORD="opcua"
 DB_COLLATE="utf8mb4_unicode_ci"
-DB_PORT="3306"
+
 
 # shellcheck disable=SC2034
 LOG_PREFIX="[MySQL.sh]"
@@ -16,19 +16,9 @@ source "$(dirname "${BASH_SOURCE[0]}")/../common.sh"
 log "Starting and activating MySQL service..."
 sudo systemctl enable --now mysql
 
-MYSQL_CONFIG="/etc/mysql/mysql.conf.d/mysqld.cnf"
-if [ -f "${MYSQL_CONFIG}" ]; then
-    if grep -qE '^[[:space:]]*port[[:space:]]*=' "${MYSQL_CONFIG}"; then
-        sudo sed -i -E "s/^[[:space:]]*port[[:space:]]*=.*/port = ${DB_PORT}/" "${MYSQL_CONFIG}"
-    else
-        echo "port = ${DB_PORT}" | sudo tee -a "${MYSQL_CONFIG}" >/dev/null
-    fi
-    sudo systemctl restart mysql
-fi
-
 log "Waiting for MySQL to be ready..."
 for i in {1..10}; do
-    if mysqladmin ping -h localhost -P "${DB_PORT}" --silent 2>/dev/null; then
+    if mysqladmin ping -h localhost --silent 2>/dev/null; then
         log "${GREEN}MySQL is ready.${RESET}"
         break
     fi
@@ -40,7 +30,7 @@ for i in {1..10}; do
 done
 
 log "Creating database '${DB_NAME}' and user '${DB_USER}'..."
-sudo mysql -u root -P "${DB_PORT}" -e "
+sudo mysql -u root -e "
 CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE ${DB_COLLATE};
 CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';
@@ -48,7 +38,7 @@ FLUSH PRIVILEGES;
 "
 
 log "Checking if database exists..."
-if sudo mysql -u root -P "${DB_PORT}" -e "SHOW DATABASES;" | grep -qw "${DB_NAME}"; then
+if sudo mysql -u root -e "SHOW DATABASES;" | grep -qw "${DB_NAME}"; then
     log "${GREEN}Database '${DB_NAME}' exists.${RESET}"
 else
     error "Database '${DB_NAME}' could not be created." >&2
@@ -56,7 +46,7 @@ else
 fi
 
 log "Checking if user '${DB_USER}' can access the database..."
-if mysql -u "${DB_USER}" -p"${DB_PASSWORD}" -h 127.0.0.1 -P "${DB_PORT}" -e "USE ${DB_NAME};" 2>/dev/null; then
+if mysql -u "${DB_USER}" -p"${DB_PASSWORD}" -h 127.0.0.1 -e "USE ${DB_NAME};" 2>/dev/null; then
     log  "${GREEN}User '${DB_USER}' can connect.${RESET}"
 else
     error "User '${DB_USER}' cannot connect to the database." >&2
