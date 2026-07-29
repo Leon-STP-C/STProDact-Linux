@@ -27,3 +27,5 @@ wget -qO - https://dbeaver.io/debs/dbeaver.gpg.key | sudo gpg --dearmor -o /usr/
 echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg] https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list
 sudo apt update
 sudo apt install -y dbeaver-ce
+log "${GREEN}DBeaver installation completed.${RESET}"
+sleep 1
