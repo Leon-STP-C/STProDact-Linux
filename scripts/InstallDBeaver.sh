@@ -16,7 +16,7 @@ fi
 read -r -p "${YELLOW}DBeaver is a Database management tool. Installation is optional. Do you want to install it? [Y/n]${RESET} " response
 case "$response" in
   [nN][oO]|[nN])
-    log "Skipping DBeaver installation."
+    log "${YELLOW}Skipping DBeaver installation.${RESET}"
     exit 0
     ;;
   *)
@@ -28,4 +28,3 @@ echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg] https://dbeaver.io/debs/db
 sudo apt update
 sudo apt install -y dbeaver-ce
 log "${GREEN}DBeaver installation completed.${RESET}"
-sleep 1

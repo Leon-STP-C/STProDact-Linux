@@ -13,7 +13,6 @@ packages=(
     nodejs
     npm
     caddy
-    python3
     curl
 	unzip
 	wget

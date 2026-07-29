@@ -6,7 +6,12 @@ set -euo pipefail
 chmod +x scripts/*.sh
 
 ./scripts/InstallDependencies.sh
+sleep 2
 ./scripts/InstallDBeaver.sh
+sleep 2
 ./scripts/DisableAutostart.sh
+sleep 2
 ./scripts/Caddy.sh
+sleep 2
 ./scripts/MySQL.sh
+sleep 2

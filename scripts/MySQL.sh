@@ -54,4 +54,3 @@ else
 fi
 
 log "${GREEN}MySQL setup completed successfully.${RESET}"
-sleep 1

@@ -39,4 +39,3 @@ fi
 log "Starting Caddy with config: $CONFIG_FILE"
 nohup caddy run --config "$CONFIG_FILE" --adapter caddyfile > /tmp/stprodact-caddy.log 2>&1 &
 log "${GREEN}Caddy started in the background (PID $!)${RESET}"
-sleep 1
