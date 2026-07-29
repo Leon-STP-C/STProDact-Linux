@@ -16,14 +16,14 @@ if ! command -v caddy >/dev/null 2>&1; then
 fi
 
 # Allows Caddy to bind to privileged ports (like 80) without running as root
-sudo setcap cap_net_bind_service=+ep $(which caddy)
+sudo setcap cap_net_bind_service=+ep "$(which caddy)"
 
 # Check if Caddy is already running and stop it if necessary
 if pgrep -x caddy >/dev/null 2>&1; then
   echo "Stopping existing Caddy process..."
-  pkill -x caddy || true
+  sudo pkill -x caddy || true
 fi
 
 echo "Starting Caddy with config: $CONFIG_FILE"
 nohup caddy run --config "$CONFIG_FILE" --adapter caddyfile > /tmp/stprodact-caddy.log 2>&1 &
-echo "Caddy started in the background (PID $!)"
+echo -e "\033[1;32mCaddy started in the background (PID $!)\033[0m"

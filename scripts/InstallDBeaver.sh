@@ -6,10 +6,10 @@ if ! command -v apt-get >/dev/null 2>&1; then
   exit 1
 fi
 
-read -r -p $'\033[1;33mDBeaver installation is optional. Do you want to install it? [Y/n]\033[0m ' response
+read -r -p $'\033[1;33mDBeaver is a Database management tool. Installation is optional. Do you want to install it? [Y/n]\033[0m ' response
 case "$response" in
   [nN][oO]|[nN])
-    echo "Skipping DBeaver installation."
+    echo -e "\033[1;33mSkipping DBeaver installation.\033[0m"
     exit 0
     ;;
   *)

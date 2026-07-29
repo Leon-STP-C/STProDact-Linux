@@ -5,4 +5,3 @@ set -euo pipefail
 
 sudo systemctl disable apache2
 sudo systemctl disable caddy
-sudo systemctl disable mysql.service

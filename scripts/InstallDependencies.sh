@@ -8,6 +8,7 @@ packages=(
     caddy
     python3
     curl
+	unzip
 	wget
 	gnupg
     apache2
@@ -37,7 +38,6 @@ else
   exit 1
 fi
 
-npm install adm-zip
+#npm install adm-zip
 
-echo "Dependency installation complete."
-#echo "Please note that DBeaver for Database Management has to be installed manually. You can download it from https://dbeaver.io/download/."
+echo -e "\033[1;32mDependency installation complete.\033[0;32m"
