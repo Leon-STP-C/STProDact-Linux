@@ -30,11 +30,14 @@ if pgrep -x caddy >/dev/null 2>&1; then
   log "${YELLOW}Existing Caddy process found. Stopping the already running instance...${RESET}" >&2
   sudo pkill -x caddy || true
 
-  # make sure caddy has stopped before continuing
+  # Make sure caddy has stopped before starting new instance.
   while pgrep -x caddy >/dev/null 2>&1; do
     sleep 0.5
   done
 fi
+
+
+sudo ufw allow 80/tcp 2>/dev/null
 
 log "Starting Caddy with config: $CONFIG_FILE"
 nohup caddy run --config "$CONFIG_FILE" --adapter caddyfile > /tmp/stprodact-caddy.log 2>&1 &

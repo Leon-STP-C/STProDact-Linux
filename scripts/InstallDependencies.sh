@@ -44,6 +44,4 @@ else
   exit 1
 fi
 
-#npm install adm-zip
-
 log "${GREEN}Dependency installation complete.${RESET}"

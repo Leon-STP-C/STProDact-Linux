@@ -4,7 +4,7 @@ set -euo pipefail
 DB_NAME="opcua"
 DB_USER="opcua"
 DB_PASSWORD="opcua"
-DB_COLLATE="utf8mb4_unicode_ci"
+DB_COLLATE="utf8mb4_0900_ai_ci"
 
 
 # shellcheck disable=SC2034
@@ -14,7 +14,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/../common.sh"
 
 
 log "Starting and activating MySQL service..."
-sudo systemctl enable --now mysql
+#sudo systemctl enable --now mysql
 
 log "Waiting for MySQL to be ready..."
 for i in {1..10}; do

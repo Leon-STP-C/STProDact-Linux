@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+#This script runs all the necessary installation scripts in the "scripts/" directory to set up the environment for the project.
+chmod +x scripts/*.sh
+
+case "$1" in
+    --install)
+		bash scripts/InstallDependencies.sh
+		bash scripts/InstallDBeaver.sh
+		bash scripts/Apache.sh
+		bash scripts/Caddy.sh
+		bash scripts/MySQL.sh
+        ;;
+    --uninstall)
+        echo "ToDo: Implement uninstallation steps for the project environment."
+        ;;
+    *)
+		echo "Usage: $0 [--install|--uninstall]"
+		exit 1
+esac
