@@ -1,0 +1,6 @@
+node_modules
+flake.nix
+flake.lock
+STProDact.iss
+.envrc
+.git
