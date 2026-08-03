@@ -26,6 +26,7 @@
             nixfmt
             nixd
             docker
+            docker-credential-helpers
             docker-compose
           ];
 
