@@ -13,7 +13,8 @@ While Nix handles docker the docker daemon still needs to be installed and setup
 
 ## Debian/Ubuntu
 For Debian/Ubuntu based distributions you can run the provided script in `bootstrap/Debian-Ubuntu-Setup.sh`
-> To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt"
+> To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt"\
+> As example:
 ```bash
         DOCKER_INSTALL_METHOD=official ./bootstrap/Debian-Ubuntu-Setup.sh
 ```
