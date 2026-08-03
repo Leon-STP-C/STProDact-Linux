@@ -16,7 +16,7 @@ For Debian/Ubuntu based distributions you can run the provided script in `bootst
 > To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt"\
 > As example:
 ```bash
-        DOCKER_INSTALL_METHOD=official ./bootstrap/Debian-Ubuntu-Setup.sh
+DOCKER_INSTALL_METHOD=official ./bootstrap/Debian-Ubuntu-Setup.sh
 ```
 
 # Getting Started

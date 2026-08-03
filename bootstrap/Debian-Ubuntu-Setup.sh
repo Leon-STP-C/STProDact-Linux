@@ -86,6 +86,8 @@ SHELL_RC="$HOME/.bashrc"
 if ! grep -q "direnv hook bash" "$SHELL_RC" 2>/dev/null; then
   echo 'eval "$(direnv hook bash)"' >> "$SHELL_RC"
   echo "Added direnv hook to $SHELL_RC"
+else 
+  echo "direnv hook already present in $SHELL_RC, skipping."
 fi
 
 # --- 5. Allow direnv in this project ---
