@@ -3,7 +3,7 @@ services:
   backend:
     build: .
     ports:
-      - '9000:9000'
+      - '3000:3000' # Host port : Internal container port
 
   db:
     image: postgres:latest
