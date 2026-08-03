@@ -37,7 +37,8 @@ if pgrep -x caddy >/dev/null 2>&1; then
 fi
 
 
-sudo ufw allow 80/tcp 2>/dev/null
+sudo ufw allow 80/tcp >/dev/null
+
 
 log "Starting Caddy with config: $CONFIG_FILE"
 nohup caddy run --config "$CONFIG_FILE" --adapter caddyfile > /tmp/stprodact-caddy.log 2>&1 &
