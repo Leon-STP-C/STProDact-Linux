@@ -67,7 +67,7 @@ fi
 # --- 2. Nix (multi-user install) ---
 if ! command -v nix >/dev/null 2>&1; then
   echo "Installing Nix..."
-	curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --daemon
+  curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --daemon
 else
   echo "Nix already installed, skipping."
 fi
