@@ -1,30 +1,31 @@
 # STProDact-Linux
 
-The purpose of this project is to try to provide an automated Setup for STProDact for Linux-Systems via the usage of Docker Containers. The STProDact.iss in this repo is the Windows setup equivalent to serve as a reference. The handling of dependencies in the environment is mainly done via `flake.nix` which is being run through the `.envrc.` Make sure to follow the [Prerequisites](#prerequisites) section to ensure proper functionality.
+The purpose of this project is to try to provide an automated Setup for STProDact for Linux-Systems via the usage of Docker Containers. `STProDact.iss` in this repo is the Windows setup equivalent to serve as a reference. The handling of dependencies in the environment is mainly done via `flake.nix` which is being run through the `.envrc.` Make sure to follow the [Prerequisites](#prerequisites) section to ensure proper functionality.
 
 # Prerequisites
 
 ## Manual
-Since flake.nix handles most dependencies this requires Nix to be installed on the system. You can download the Nix package manager [here](https://nixos.org/download/)\
-For this to work direnv also has to be setup on the system. Basic Installation guide can be found [here](https://github.com/direnv/direnv#basic-installation)
+Since flake.nix handles most dependencies this requires Nix to be installed on the system. The Nix package manager can be downloaded [here](https://nixos.org/download/).\
+For this to work direnv also has to be setup on the system. A basic installation guide can be found [here](https://github.com/direnv/direnv#basic-installation)
 
 **IMPORTANT!**\
-While Nix handles docker the docker daemon still needs to be installed and setup manually for your distribution.
+While Nix handles docker and all its tools, the docker daemon itself still needs to be installed and setup manually for your distribution.
 
 ## Debian/Ubuntu
-For Debian/Ubuntu based distributions you can run the provided script in `bootstrap/Debian-Ubuntu-Setup.sh`
-NOTE: Its best to run this script outside of the dev shell as it may introduce bugs.
+For Debian/Ubuntu based distributions you can run the provided script in `bootstrap/debian-ubunutu.sh`\
+NOTE: If you're re-running this script its best to run outside of the dev shell as it may introduce bugs.
 > To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt"\
+> The same applies to DBeaver which is an optional Database management tool to mirror HeidiSQL in the Windows installer.\
 > As example:
 ```bash
-DOCKER_INSTALL_METHOD=official ./bootstrap/Debian-Ubuntu-Setup.sh
+DOCKER_INSTALL_METHOD=official ./bootstrap/debian-ubuntu.sh
 ```
 
 # Getting Started
 
 ## Start the stack
 
-All Docker files live in `src/`. From inside the dev shell (or with Docker available):
+All Docker files live in `src/`. From inside the dev shell (or with Docker available) run:
 
 ```bash
 cd src
@@ -53,9 +54,7 @@ database credentials, or the HTTP port. The database values are only applied
 when the `mysql_data` volume is first initialized.
 
 The web application is reached on host port 80 by default (`HTTP_PORT`). If
-that port is already used on the host (for example by a system-installed
-Caddy), set `HTTP_PORT` to a free port in `.env`, e.g.:
-
+that port is already used on the host set `HTTP_PORT` to a free port in `.env`, e.g..
 ```bash
 HTTP_PORT=8080
 ```
