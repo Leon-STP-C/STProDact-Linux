@@ -75,12 +75,15 @@ services:
 
   # Reverse proxy (equivalent of the STProDactProxy Windows service).
   # The Windows installer created a firewall rule allowing TCP port 80;
-  # here the port is published on the host.
+  # here port 80 is published on the host by default (HTTP_PORT).
+  # If port 80 is already taken on the host (e.g. by a system Caddy), set
+  # HTTP_PORT in .env to any free port; the access URL changes accordingly,
+  # while the app itself keeps listening on port 3000 inside its container.
   proxy:
     image: caddy:2
     container_name: stpro-dact-proxy
     ports:
-      - "80:80"
+      - "${HTTP_PORT:-80}:80"
     volumes:
       - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data              # {commonappdata}\ST-PRO DACT\caddy\data

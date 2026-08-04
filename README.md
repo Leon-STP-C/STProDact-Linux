@@ -43,13 +43,25 @@ On first start the MySQL data directory is initialized and `src/db/init.sql` cre
 the `opcua` database and the `opcua` user exactly like the Windows installer does
 (`utf8mb4` / `utf8mb4_0900_ai_ci`, `opcua`/`opcua`, full privileges on `opcua.*`).
 
-The application is then reachable at `http://localhost:80`.
+The application is then reachable at `http://localhost:80` (or the `HTTP_PORT`
+you configured in `.env`).
 
 ### Configuration
 
-Copy `src/.env.example` to `src/.env` to change the MySQL root password or the
-database credentials. The values are only applied when the `mysql_data` volume is
-first initialized.
+Copy `src/.env.example` to `src/.env` to change the MySQL root password, the
+database credentials, or the HTTP port. The database values are only applied
+when the `mysql_data` volume is first initialized.
+
+The web application is reached on host port 80 by default (`HTTP_PORT`). If
+that port is already used on the host (for example by a system-installed
+Caddy), set `HTTP_PORT` to a free port in `.env`, e.g.:
+
+```bash
+HTTP_PORT=8080
+```
+
+The app itself always listens on port 3000 inside its container, so the access
+URL simply becomes `http://localhost:8080`.
 
 To reach MySQL from the host (e.g. with a DB manager, the Linux counterpart of the
 optional HeidiSQL component), uncomment this line in `compose.yaml`:
