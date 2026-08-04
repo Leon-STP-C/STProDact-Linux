@@ -104,20 +104,30 @@ LOG_PREFIX="[DBeaver]"
 # --- 1.5. DBeaver (optional) ---
 
 if ! command -v dbeaver >/dev/null 2>&1; then
-	read -r -p "${BLUE}DBeaver is a Database management tool. Installation is optional. Do you wish to install it? [Y/n]${RESET} " response
-	case "$response" in
+	# Determine install decision: env var override > interactive prompt > default
+	if [ -n "${DBEAVER_INSTALL:-}" ]; then
+		dbeaver_choice="$DBEAVER_INSTALL"
+		log "${BLUE}DBEAVER_INSTALL set to '$dbeaver_choice', skipping prompt.${RESET}"
+	elif [ -t 0 ]; then
+		read -r -p "${BLUE}DBeaver is a Database management tool. Installation is optional. Do you wish to install it? [Y/n]${RESET} " response
+		dbeaver_choice="${response:-y}"
+	else
+		log "${BLUE}Non-interactive shell detected, defaulting to installing DBeaver.${RESET}"
+		dbeaver_choice="y"
+	fi
+
+	case "$dbeaver_choice" in
 	[nN][oO]|[nN])
 		log "${YELLOW}Skipping DBeaver installation.${RESET}"
-		exit 0
 		;;
 	*)
+		wget -qO - https://dbeaver.io/debs/dbeaver.gpg.key | sudo gpg --yes --dearmor -o /usr/share/keyrings/dbeaver.gpg
+		echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg] https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list
+		sudo apt update
+		sudo apt install -y dbeaver-ce
+		log "${GREEN}DBeaver installation completed.${RESET}"
+		;;
 	esac
-
-	wget -qO - https://dbeaver.io/debs/dbeaver.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/dbeaver.gpg
-	echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg] https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list
-	sudo apt update
-	sudo apt install -y dbeaver-ce
-	log "${GREEN}DBeaver installation completed.${RESET}"
 else
 	log "${YELLOW}DBeaver already installed, skipping.${RESET}"
 fi

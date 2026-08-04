@@ -14,11 +14,11 @@ While Nix handles docker and all its tools, the docker daemon itself still needs
 ## Debian/Ubuntu
 For Debian/Ubuntu based distributions you can run the provided script in `bootstrap/debian-ubunutu.sh`\
 NOTE: If you're re-running this script its best to run outside of the dev shell as it may introduce bugs.
-> To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt"\
-> The same applies to DBeaver which is an optional Database management tool to mirror HeidiSQL in the Windows installer.\
+> To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt".\
+> The same applies to DBeaver which is an optional Database management tool to mirror HeidiSQL in the Windows installer: set DBEAVER_INSTALL to either "yes" or "no" to bypass its prompt.\
 > As example:
 ```bash
-DOCKER_INSTALL_METHOD=official ./bootstrap/debian-ubuntu.sh
+DOCKER_INSTALL_METHOD=official DBEAVER_INSTALL=no ./bootstrap/debian-ubuntu.sh
 ```
 
 # Getting Started
