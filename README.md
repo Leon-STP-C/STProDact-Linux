@@ -1,6 +1,7 @@
 # STProDact-Linux
 
-The purpose of this project is to try to provide an automated Setup for STProDact for Linux-Systems via the usage of Docker Containers. `STProDact.iss` in this repo is the Windows setup equivalent to serve as a reference. The handling of dependencies in the environment is mainly done via `flake.nix` which is being run through the `.envrc.` Make sure to follow the [Prerequisites](#prerequisites) section to ensure proper functionality.
+The purpose of this project is to try to provide an automated Setup for STProDact for Linux-Systems via the usage of Docker Containers. `STProDact.iss` in this repo is the Windows setup to serve as a reference.
+The handling of dependencies in the environment is mainly done via `flake.nix` which is being run through the `.envrc.` Make sure to follow the [Prerequisites](#prerequisites) section to ensure proper functionality.
 
 # Prerequisites
 
@@ -18,7 +19,7 @@ NOTE: If you're re-running this script its best to run outside of the dev shell 
 > The same applies to DBeaver which is an optional Database management tool to mirror HeidiSQL in the Windows installer: set DBEAVER_INSTALL to either "yes" or "no" to bypass its prompt.\
 > As example:
 ```bash
-DOCKER_INSTALL_METHOD=official DBEAVER_INSTALL=no ./bootstrap/debian-ubuntu.sh
+DOCKER_INSTALL_METHOD=official DBEAVER_INSTALL=yes ./bootstrap/debian-ubuntu.sh
 ```
 
 # Getting Started
