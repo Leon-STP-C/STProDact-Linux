@@ -64,9 +64,8 @@ The app itself always listens on port 3000 inside its container, so the access
 URL simply becomes `http://localhost:8080`.
 
 MySQL is reachable from the host out of the box: the `db` service publishes
-port `DB_PORT` (default `3307`) on the host loopback, mirroring the
-installer's `bind-address=127.0.0.1`.\
-If that port is already used set `DB_PORT` to a free port in `.env`.
+port `DB_PORT` which defaults to 3306 on the host loopback.
+If that port (e.g. by a locally installed MySQL) is already used set `DB_PORT` to a free port in `.env`.
 >  When using a GUI like DBeaver make sure that `allowPublicKeyRetrieval` is set to true to be able to connect to the Database.
 
 ## Maintenance
