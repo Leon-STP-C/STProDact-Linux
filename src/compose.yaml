@@ -28,8 +28,10 @@ services:
       - --sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
       - --mysqlx=0
 
-    #ports:
-    #  - "127.0.0.1:3307:3306"  # MySQL client access on host
+    # Published on the host loopback only (mirrors the installer's
+    # bind-address=127.0.0.1). Host port is DB_PORT from .env, default 3307.
+    ports:
+      - "127.0.0.1:${DB_PORT:-3307}:3306"  # MySQL client access on host
 
     environment:
       # The Windows installer initialized MySQL with "--initialize-insecure"

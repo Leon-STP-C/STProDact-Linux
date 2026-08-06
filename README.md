@@ -63,16 +63,11 @@ HTTP_PORT=8080
 The app itself always listens on port 3000 inside its container, so the access
 URL simply becomes `http://localhost:8080`.
 
-To reach MySQL from the host (e.g. with a DB manager), uncomment lines 31 and 32 in `compose.yaml`:
-
-```yaml
-ports:
-  - "127.0.0.1:3307:3306"  # MySQL client access on host
-```
-
-After restarting the stack, the new port mapping will take effect and MySQL will be accessible from the host on port 3307 or on your desired port.
-No further configuration is needed as the internal docker compose network stays the same.
-> When using a GUI make sure that `allowPublicKeyRetrieval` is set to true to be able to connect to the Database.
+MySQL is reachable from the host out of the box: the `db` service publishes
+port `DB_PORT` (default `3307`) on the host loopback, mirroring the
+installer's `bind-address=127.0.0.1`.\
+If that port is already used set `DP_PORT` to a free port in `.env`
+>  When using a GUI like DBeaver make sure that `allowPublicKeyRetrieval` is set to true to be able to connect to the Database.
 
 ## Maintenance
 
@@ -95,8 +90,9 @@ logs, configuration, app data, profile and Caddy data — the equivalent of the
 ## Notes
 
 - The Windows installer bound MySQL to `127.0.0.1`. Inside Docker the database
-  is only exposed on the internal compose network; the app container reaches it
-  via the `db` hostname. No MySQL port is published to the host by default.
+  is exposed on the internal compose network (the app reaches it via the `db`
+  hostname) and additionally published on the host loopback at port `DB_PORT`
+  (default `3307`) for database clients.
 - On reinstall, existing data is reused automatically: the MySQL init scripts
   only run when the `mysql_data` volume is empty, matching the installer's
   "reuse existing data" behaviour.
