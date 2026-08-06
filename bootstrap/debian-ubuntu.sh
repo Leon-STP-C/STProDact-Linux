@@ -84,9 +84,28 @@ if ! command -v docker >/dev/null 2>&1; then
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
 
+    # Detect distribution (Debian vs Ubuntu) for the Docker repository host
+    DOCKER_REPO_DIST="ubuntu"
+    if [ -f /etc/os-release ]; then
+      . /etc/os-release
+      case "${ID,,}" in
+        debian|raspbian)
+          DOCKER_REPO_DIST="debian"
+          ;;
+        ubuntu)
+          DOCKER_REPO_DIST="ubuntu"
+          ;;
+        *)
+          if echo "${ID_LIKE:-}" | grep -qi "debian"; then
+            DOCKER_REPO_DIST="debian"
+          fi
+          ;;
+      esac
+    fi
+
     echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/${DOCKER_REPO_DIST} \
+      $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | \
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     sudo apt-get update
