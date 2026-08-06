@@ -24,7 +24,8 @@ error() {
     printf "%s ${RED}ERROR:${RESET} %b\n" "$LOG_PREFIX" "$*" >&2
 }
 
-
+# default to false
+ADDED_TO_DOCKER_GROUP=false
 
 
 log "${BLUE}Bootstrapping dev environment...${RESET}"
@@ -94,7 +95,8 @@ if ! command -v docker >/dev/null 2>&1; then
 
   sudo systemctl enable --now docker
   sudo usermod -aG docker "$USER"
-  log "${YELLOW}You were added to the 'docker' group. Log out/in (or run 'newgrp docker') for it to take effect.${RESET}"
+  #log "${YELLOW}You were added to the 'docker' group. Log out/in (or run 'newgrp docker') for it to take effect.${RESET}"
+  ADDED_TO_DOCKER_GROUP=true
   log "${GREEN}Docker installation completed.${RESET}"
 else
   log "${YELLOW}Docker already installed, skipping.${RESET}"
@@ -171,3 +173,6 @@ direnv allow "$SCRIPT_DIR/.."
 
 LOG_PREFIX="[debian-ubuntu.sh]"
 log "${GREEN}Done. Restart your shell (or 'source ~/.bashrc') then cd into the project.${RESET}"
+if [ "$ADDED_TO_DOCKER_GROUP" = true ]; then
+log "${GREEN}You were added to the 'docker' group. Log out/in (or run 'newgrp docker') for it to take effect.${RESET}"
+fi
