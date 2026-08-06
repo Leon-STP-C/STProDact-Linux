@@ -1,7 +1,7 @@
 # STProDact-Linux
 
-The purpose of this project is to try to provide an automated Setup for STProDact for Linux-Systems via the usage of Docker Containers. `STProDact.iss` in this repo is the Windows setup to serve as a reference.
-The handling of dependencies in the environment is mainly done via `flake.nix` which is being run through the `.envrc.` Make sure to follow the [Prerequisites](#prerequisites) section to ensure proper functionality.
+The purpose of this project is to try to provide an automated Setup for STProDact for Linux-Systems via the usage of Docker Containers. `STProDact.iss` in this repo is the Windows setup to serve as a reference.\
+The handling of dependencies in the environment is mainly done via `flake.nix` which is being run through the `.envrc`. Make sure to follow the [Prerequisites](#prerequisites) section to ensure proper functionality.
 
 # Prerequisites
 
@@ -13,7 +13,7 @@ For this to work direnv also has to be setup on the system. A basic installation
 While Nix handles docker and all its tools, the docker daemon itself still needs to be installed and setup manually for your distribution.
 
 ## Debian/Ubuntu
-For Debian/Ubuntu based distributions you can run the provided script in `bootstrap/debian-ubunutu.sh`\
+For Debian/Ubuntu based distributions you can run the provided script in `bootstrap/debian-ubuntu.sh`\
 NOTE: If you're re-running this script its best to run outside of the dev shell as it may introduce bugs.
 > To bypass the Docker install method prompt you may also set the DOCKER_INSTALL_METHOD environment variable to either "official" or "apt".\
 > The same applies to DBeaver which is an optional Database management tool to mirror HeidiSQL in the Windows installer: set DBEAVER_INSTALL to either "yes" or "no" to bypass its prompt.\
@@ -55,7 +55,7 @@ database credentials, or the HTTP port. The database values are only applied
 when the `mysql_data` volume is first initialized.
 
 The web application is reached on host port 80 by default (`HTTP_PORT`). If
-that port is already used on the host set `HTTP_PORT` to a free port in `.env`, e.g..
+that port is already used on the host set `HTTP_PORT` to a free port in `.env`, e.g.
 ```bash
 HTTP_PORT=8080
 ```
@@ -66,7 +66,7 @@ URL simply becomes `http://localhost:8080`.
 MySQL is reachable from the host out of the box: the `db` service publishes
 port `DB_PORT` (default `3307`) on the host loopback, mirroring the
 installer's `bind-address=127.0.0.1`.\
-If that port is already used set `DP_PORT` to a free port in `.env`
+If that port is already used set `DB_PORT` to a free port in `.env`.
 >  When using a GUI like DBeaver make sure that `allowPublicKeyRetrieval` is set to true to be able to connect to the Database.
 
 ## Maintenance
