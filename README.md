@@ -41,9 +41,9 @@ This starts three containers, mirroring the Windows setup:
 | `STProDactApp`                  | `app`      | built locally  | Node.js application (OPC-UA, web UI)     |
 | `STProDactProxy`                | `proxy`    | `caddy:2`      | Reverse proxy, publishes port 80         |
 
-On first start the MySQL data directory is initialized and `src/db/init.sql` creates
-the `opcua` database and the `opcua` user exactly like the Windows installer does
-(`utf8mb4` / `utf8mb4_0900_ai_ci`, `opcua`/`opcua`, full privileges on `opcua.*`).
+On first start the MySQL data directory is initialized and `src/db/init.sh` creates
+the database and user configured in `src/.env` exactly like the Windows installer
+does (`utf8mb4` / `utf8mb4_0900_ai_ci`, full privileges on the configured database).
 
 The application is then reachable at `http://localhost:80` (or the `HTTP_PORT`
 you configured in `.env`).
@@ -63,12 +63,16 @@ HTTP_PORT=8080
 The app itself always listens on port 3000 inside its container, so the access
 URL simply becomes `http://localhost:8080`.
 
-To reach MySQL from the host (e.g. with a DB manager, the Linux counterpart of the
-optional HeidiSQL component), uncomment this line in `compose.yaml`:
+To reach MySQL from the host (e.g. with a DB manager), uncomment lines 31 and 32 in `compose.yaml`:
 
 ```yaml
-#      - "127.0.0.1:3306:3306"
+ports:
+  - "127.0.0.1:3307:3306"  # MySQL client access on host
 ```
+
+After restarting the stack, the new port mapping will take effect and MySQL will be accessible from the host on port 3307 or on your desired port.
+No further configuration is needed as the internal docker compose network stays the same.
+> When using a GUI make sure that `allowPublicKeyRetrieval` is set to true to be able to connect to the Database.
 
 ## Maintenance
 
