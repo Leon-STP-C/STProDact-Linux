@@ -29,7 +29,7 @@ services:
       - --mysqlx=0
 
     # Published on the host loopback only (mirrors the installer's
-    # bind-address=127.0.0.1). Host port is DB_PORT from .env, default 3307.
+    # bind-address=127.0.0.1). Host port is DB_PORT from .env, default 3306.
     ports:
       - "127.0.0.1:${DB_PORT:-3306}:3306"  # MySQL client access on host
 
