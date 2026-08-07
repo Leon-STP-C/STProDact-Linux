@@ -1,0 +1,121 @@
+# ST-PRO DACT - Docker deployment.
+# Linux/Docker equivalent of the Windows installer STProDact.iss.
+#
+# Component mapping (see [Components] in STProDact.iss):
+#   core     -> services: app, db, proxy
+#   heidisql -> not applicable on Linux; use any MySQL client instead
+#
+# Service mapping (see [Code] in STProDact.iss):
+#   MySQLSTProDact  -> db     (mysql:8.4, collation utf8mb4_0900_ai_ci)
+#   STProDactApp    -> app    (node app)
+#   STProDactProxy  -> proxy  (caddy, exposes port 80)
+#
+# The named volumes below correspond to the "{commonappdata}\ST-PRO DACT"
+# directories created by the installer [Dirs] section.
+
+name: stpro-dact
+
+services:
+
+  # MySQL (equivalent of the MySQLSTProDact Windows service).
+  # my.ini written by WriteMySqlIni() is reproduced via command line options.
+  db:
+    image: mysql:8.4
+    container_name: stpro-dact-db
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+      - --mysqlx=0
+
+    # Published on the host loopback only (mirrors the installer's
+    # bind-address=127.0.0.1). Host port is DB_PORT from .env, default 3306.
+    ports:
+      - "127.0.0.1:${DB_PORT:-3306}:3306"  # MySQL client access on host
+
+    environment:
+      # The Windows installer initialized MySQL with "--initialize-insecure"
+      # and no root password. Set a root password here (override via .env).
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      # Database/user created on first initialization (override via .env).
+      MYSQL_DATABASE: ${DB_NAME:-opcua}
+      MYSQL_USER: ${DB_USER:-opcua}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-opcua}
+    volumes:
+      - mysql_data:/var/lib/mysql        # {commonappdata}\ST-PRO DACT\mysql-data
+      - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # App (equivalent of the STProDactApp Windows service).
+  app:
+    build: .
+    container_name: stpro-dact-app
+    environment:
+      PORT: 3000
+      STPRO_DATA_DIR: /srv/app
+      # Database connection used by the app (user created by the db service
+      # from the same .env values). Inside the compose network the db service
+      # replaces 127.0.0.1.
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-opcua}
+      DB_USER: ${DB_USER:-opcua}
+      DB_PASSWORD: ${DB_PASSWORD:-opcua}
+    volumes:
+      - app_config:/srv/app/config
+      - app_logs:/srv/app/logs
+      - app_appdata:/srv/app/appdata
+      - app_profile:/srv/app/profile
+      - app_tmp:/srv/app/tmp
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:'+(process.env.PORT||'3000')+'/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # Reverse proxy (equivalent of the STProDactProxy Windows service).
+  # The Windows installer created a firewall rule allowing TCP port 80;
+  # here port 80 is published on the host by default (HTTP_PORT).
+  # If port 80 is already taken on the host (e.g. by a system Caddy), set
+  # HTTP_PORT in .env to any free port; the access URL changes accordingly,
+  # while the app itself keeps listening on port 3000 inside its container.
+  proxy:
+    image: caddy:2
+    container_name: stpro-dact-proxy
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data              # {commonappdata}\ST-PRO DACT\caddy\data
+      - caddy_config:/config          # {commonappdata}\ST-PRO DACT\caddy\config
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  app_config:
+  app_logs:
+  app_appdata:
+  app_profile:
+  app_tmp:
+  caddy_data:
+  caddy_config:

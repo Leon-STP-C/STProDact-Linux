@@ -1,0 +1,5 @@
+# Env / Secrets
+.env*
+!.env.example
+
+.direnv

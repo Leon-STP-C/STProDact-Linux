@@ -1,0 +1,14 @@
+# ST-PRO DACT reverse proxy configuration.
+# Docker equivalent of "{commonappdata}\ST-PRO DACT\config\Caddyfile".
+# The Windows installer exposed the app through Caddy on port 80
+# (firewall rule "ST-PRO DACT HTTP", TCP 80). Here Caddy listens on port 80
+# of the host and forwards everything to the app container.
+
+{
+	# Let's Encrypt is disabled by default because the service runs on port 80
+	# (HTTP only), matching the Windows setup. Keep this block empty.
+}
+
+:80 {
+	reverse_proxy app:3000
+}

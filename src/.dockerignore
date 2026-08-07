@@ -1,0 +1,11 @@
+# Copy of the app dependency tree is required to build the image.
+# flake.nix
+flake.lock
+STProDact.iss
+.envrc
+.git
+compose.yaml
+.env
+.env.example
+db
+proxy
